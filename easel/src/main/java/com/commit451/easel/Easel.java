@@ -7,15 +7,23 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.internal.widget.ThemeUtils;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.SeekBar;
 
 /**
  * Paint it black
@@ -24,12 +32,6 @@ import android.widget.CheckBox;
 public class Easel {
 
     private static float[] hsv = new float[3];
-    private static TypedValue typedValue = new TypedValue();
-    private static int colorPrimary = -1;
-    private static int colorPrimaryDark = -1;
-    private static int colorAccent = -1;
-    private static int colorForeground = -1;
-    private static int colorForegroundInverse = -1;
 
     public static SpannableString colorWords(String str, int color) {
         return colorWords(str, str.length(), color);
@@ -57,58 +59,6 @@ public class Easel {
         return drawable;
     }
 
-    public static int colorPrimary(Context context) {
-        if (colorPrimary == -1) {
-            context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-            colorPrimary = typedValue.data;
-        }
-        return colorPrimary;
-    }
-
-
-    public static int colorPrimaryDark(Context context) {
-        if (colorPrimaryDark == -1) {
-            context.getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
-            colorPrimaryDark = typedValue.data;
-        }
-        return colorPrimaryDark;
-    }
-
-
-    public static int colorAccent(Context context) {
-        if (colorAccent == -1) {
-            context.getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
-            colorAccent = typedValue.data;
-        }
-        return colorAccent;
-    }
-
-
-    public static int colorForground(Context context) {
-        if (colorForeground == -1) {
-            context.getTheme().resolveAttribute(android.R.attr.colorForeground, typedValue, true);
-            colorForeground = typedValue.data;
-        }
-        return colorForeground;
-    }
-
-    public static int colorForegroundInverse(Context context) {
-        if (colorForegroundInverse == -1) {
-            context.getTheme().resolveAttribute(android.R.attr.colorForegroundInverse, typedValue, true);
-            colorForegroundInverse = typedValue.data;
-        }
-        return colorForegroundInverse;
-    }
-
-    /**
-     * Clear all the colors that have to do with the theme so that we do not
-     * cache values that relate to the theme applied
-     */
-    public static void clear() {
-        colorForeground = -1;
-        colorForegroundInverse = -1;
-    }
-
     public static int getDarkerColor(int color) {
         Color.colorToHSV(color, hsv);
         hsv[2] *= 0.8f; // value component
@@ -120,16 +70,140 @@ public class Easel {
         if (background instanceof ColorDrawable) {
             return ((ColorDrawable) background).getColor();
         } else {
-            return Color.TRANSPARENT;
+            throw new IllegalArgumentException("View must have a ColorDrawable background");
         }
     }
 
-    public static void setTint(CheckBox box, int color, int unpressedColor) {
+    public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
+        setTint(switchCompat, color, ThemeUtils.getThemeAttrColor(switchCompat.getContext(), R.attr.colorControlNormal));
+    }
+
+    public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color, @ColorInt int unpressedColor) {
         ColorStateList sl = new ColorStateList(new int[][]{
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         }, new int[]{
                 unpressedColor,
+                color
+        });
+
+        DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
+    }
+
+    public static void setTint(@NonNull Menu menu, @ColorInt int color) {
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            if (menuItem.getIcon() != null) {
+                setTint(menuItem, color);
+            }
+        }
+    }
+
+    public static void setTint(@NonNull MenuItem menuItem, @ColorInt int color) {
+        Drawable icon = menuItem.getIcon();
+        if (icon != null) {
+            icon.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        } else {
+            throw new IllegalArgumentException("Menu item does not have an icon");
+        }
+    }
+
+    public static void setTint(@NonNull RadioButton radioButton, @ColorInt int color) {
+        ColorStateList sl = new ColorStateList(new int[][]{
+                new int[]{-android.R.attr.state_checked},
+                new int[]{android.R.attr.state_checked}
+        }, new int[]{
+                ThemeUtils.getThemeAttrColor(radioButton.getContext(), R.attr.colorControlNormal),
+                color
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            radioButton.setButtonTintList(sl);
+        } else {
+            Drawable d = DrawableCompat.wrap(ContextCompat.getDrawable(radioButton.getContext(), R.drawable.abc_btn_radio_material));
+            DrawableCompat.setTintList(d, sl);
+            radioButton.setButtonDrawable(d);
+        }
+    }
+
+    public static void setTint(@NonNull SeekBar seekBar, @ColorInt int color) {
+        ColorStateList s1 = ColorStateList.valueOf(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            seekBar.setThumbTintList(s1);
+            seekBar.setProgressTintList(s1);
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+            Drawable progressDrawable = DrawableCompat.wrap(seekBar.getProgressDrawable());
+            seekBar.setProgressDrawable(progressDrawable);
+            DrawableCompat.setTintList(progressDrawable, s1);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                Drawable thumbDrawable = DrawableCompat.wrap(seekBar.getThumb());
+                DrawableCompat.setTintList(thumbDrawable, s1);
+                seekBar.setThumb(thumbDrawable);
+            }
+        } else {
+            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                mode = PorterDuff.Mode.MULTIPLY;
+            }
+            if (seekBar.getIndeterminateDrawable() != null)
+                seekBar.getIndeterminateDrawable().setColorFilter(color, mode);
+            if (seekBar.getProgressDrawable() != null)
+                seekBar.getProgressDrawable().setColorFilter(color, mode);
+        }
+    }
+
+    public static void setTint(@NonNull ProgressBar progressBar, @ColorInt int color) {
+        setTint(progressBar, color, false);
+    }
+
+    public static void setTint(@NonNull ProgressBar progressBar, @ColorInt int color, boolean skipIndeterminate) {
+        ColorStateList sl = ColorStateList.valueOf(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setProgressTintList(sl);
+            progressBar.setSecondaryProgressTintList(sl);
+            if (!skipIndeterminate)
+                progressBar.setIndeterminateTintList(sl);
+        } else {
+            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                mode = PorterDuff.Mode.MULTIPLY;
+            }
+            if (!skipIndeterminate && progressBar.getIndeterminateDrawable() != null)
+                progressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+            if (progressBar.getProgressDrawable() != null)
+                progressBar.getProgressDrawable().setColorFilter(color, mode);
+        }
+    }
+
+    private static ColorStateList createEditTextColorStateList(@NonNull Context context, @ColorInt int color) {
+        int[][] states = new int[3][];
+        int[] colors = new int[3];
+        int i = 0;
+        states[i] = new int[]{-android.R.attr.state_enabled};
+        colors[i] = ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal);
+        i++;
+        states[i] = new int[]{-android.R.attr.state_pressed, -android.R.attr.state_focused};
+        colors[i] = ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal);
+        i++;
+        states[i] = new int[]{};
+        colors[i] = color;
+        return new ColorStateList(states, colors);
+    }
+
+    public static void setTint(@NonNull EditText editText, @ColorInt int color) {
+        ColorStateList editTextColorStateList = createEditTextColorStateList(editText.getContext(), color);
+        if (editText instanceof AppCompatEditText) {
+            ((AppCompatEditText) editText).setSupportBackgroundTintList(editTextColorStateList);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            editText.setBackgroundTintList(editTextColorStateList);
+        }
+    }
+
+    public static void setTint(@NonNull CheckBox box, @ColorInt int color) {
+        ColorStateList sl = new ColorStateList(new int[][]{
+                new int[]{-android.R.attr.state_checked},
+                new int[]{android.R.attr.state_checked}
+        }, new int[]{
+                ThemeUtils.getThemeAttrColor(box.getContext(), R.attr.colorControlNormal),
                 color
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -138,26 +212,6 @@ public class Easel {
             Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(box.getContext(), R.drawable.abc_btn_check_material));
             DrawableCompat.setTintList(drawable, sl);
             box.setButtonDrawable(drawable);
-        }
-    }
-
-    public static void setTint(SwitchCompat switchCompat, int color, int unpressedColor) {
-        ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{-android.R.attr.state_checked},
-                new int[]{android.R.attr.state_checked}
-        }, new int[]{
-                unpressedColor,
-                color
-        });
-        DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
-    }
-
-    public static void setTint(Menu menu, int color) {
-        for (int i = 0; i < menu.size(); i++) {
-            Drawable icon = menu.getItem(i).getIcon();
-            if (icon != null) {
-                icon.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
-            }
         }
     }
 }

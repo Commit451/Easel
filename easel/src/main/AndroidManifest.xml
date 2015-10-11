@@ -1,7 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.commit451.easel">
+<manifest package="com.commit451.easel">
 
-    <application android:allowBackup="true" android:label="@string/app_name">
-
-    </application>
+    <application />
 
 </manifest>
