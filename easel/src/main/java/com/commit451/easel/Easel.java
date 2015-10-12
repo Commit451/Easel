@@ -24,6 +24,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
+import android.widget.TextView;
+
+import java.lang.reflect.Field;
 
 /**
  * Paint it black
@@ -65,6 +68,16 @@ public class Easel {
         return Color.HSVToColor(hsv);
     }
 
+    /**
+     * Gets the color with the alpha changed by a factor.
+     * @param color original color
+     * @param factor factor, such as 0.5f for 50%
+     * @return
+     */
+    public static int adjustAlpha(int color, float factor) {
+        return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
+    }
+
     public static int getBackgroundColor(View v) {
         Drawable background = v.getBackground();
         if (background instanceof ColorDrawable) {
@@ -75,7 +88,7 @@ public class Easel {
     }
 
     public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
-        setTint(switchCompat, color, ThemeUtils.getThemeAttrColor(switchCompat.getContext(), R.attr.colorControlNormal));
+        setTint(switchCompat, color, ThemeUtils.getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
     }
 
     public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color, @ColorInt int unpressedColor) {
@@ -88,6 +101,29 @@ public class Easel {
         });
 
         DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
+        DrawableCompat.setTintList(switchCompat.getTrackDrawable(), getSwitchTrackColorStateList(switchCompat.getContext(), color));
+    }
+
+    private static ColorStateList getSwitchTrackColorStateList(Context context, @ColorInt int color) {
+            final int[][] states = new int[3][];
+            final int[] colors = new int[3];
+            int i = 0;
+
+            // Disabled state
+            states[i] = new int[] { -android.R.attr.state_enabled };
+        colors[i] = adjustAlpha(ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal), 0.1f);
+            i++;
+
+            states[i] = new int[] { android.R.attr.state_checked };
+        colors[i] = adjustAlpha(color, 0.3f);
+            i++;
+
+            // Default enabled state
+            states[i] = new int[0];
+        colors[i] = adjustAlpha(ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f);
+            i++;
+
+        return new ColorStateList(states, colors);
     }
 
     public static void setTint(@NonNull Menu menu, @ColorInt int color) {
@@ -196,6 +232,7 @@ public class Easel {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             editText.setBackgroundTintList(editTextColorStateList);
         }
+        setCursorDrawableColor(editText, color);
     }
 
     public static void setTint(@NonNull CheckBox box, @ColorInt int color) {
@@ -212,6 +249,34 @@ public class Easel {
             Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(box.getContext(), R.drawable.abc_btn_check_material));
             DrawableCompat.setTintList(drawable, sl);
             box.setButtonDrawable(drawable);
+        }
+    }
+
+    /**
+     * Sets the cursor color of the EditText. Kinda hacky using reflection, but it gets the job done.
+     * http://stackoverflow.com/questions/25996032/how-to-change-programatically-edittext-cursor-color-in-android
+     * @param editText editText to change the cursor color
+     * @param color color to change the cursor to
+     */
+    public static void setCursorDrawableColor(EditText editText, int color) {
+        try {
+            Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            fCursorDrawableRes.setAccessible(true);
+            int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
+            Field fEditor = TextView.class.getDeclaredField("mEditor");
+            fEditor.setAccessible(true);
+            Object editor = fEditor.get(editText);
+            Class<?> clazz = editor.getClass();
+            Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+            fCursorDrawable.setAccessible(true);
+            Drawable[] drawables = new Drawable[2];
+            drawables[0] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
+            drawables[1] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
+            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            fCursorDrawable.set(editor, drawables);
+        } catch (Exception ignored) {
+            throw new IllegalStateException("Something went wrong setting the cursor color");
         }
     }
 }
