@@ -1,5 +1,8 @@
 package com.commit451.easel;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -20,6 +23,7 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -37,6 +41,7 @@ import java.util.ArrayList;
 public class Easel {
 
     private static float[] hsv = new float[3];
+    private static ArgbEvaluator sArgbEvaluator = new ArgbEvaluator();
 
     public static Drawable setDrawableTint(Context context, @DrawableRes int resId, @ColorInt int color) {
         Drawable drawable;
@@ -292,5 +297,22 @@ public class Easel {
         }
         TintImageView overflow=(TintImageView) outViews.get(0);
         overflow.setColorFilter(color);
+    }
+
+    public static ObjectAnimator getBackgroundColorAnimator(View v, int endColor) {
+        return ObjectAnimator.ofObject(v, "backgroundColor", sArgbEvaluator,
+                getBackgroundColor(v), endColor);
+    }
+
+    @TargetApi(21)
+    public static ObjectAnimator getStatusBarColorAnimator(Window window, int endColor) {
+        return ObjectAnimator.ofObject(window, "statusBarColor", sArgbEvaluator,
+                window.getStatusBarColor(), endColor);
+    }
+
+    @TargetApi(21)
+    public static ObjectAnimator getNavigationBarColorAnimator(Window window, int endColor) {
+        return ObjectAnimator.ofObject(window, "navigationBarColor", sArgbEvaluator,
+                window.getNavigationBarColor(), endColor);
     }
 }
