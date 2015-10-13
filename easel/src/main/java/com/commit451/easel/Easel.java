@@ -1,5 +1,6 @@
 package com.commit451.easel;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -8,14 +9,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorInt;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.internal.widget.ThemeUtils;
+import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,44 +28,39 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 /**
- * Paint it black
+ * Apply tinting to widgets, drawables, and various other things through Easel
  * Created by Jawn on 7/28/2015.
  */
 public class Easel {
 
     private static float[] hsv = new float[3];
 
-    public static SpannableString colorWords(String str, int color) {
-        return colorWords(str, str.length(), color);
-    }
-
-    public static SpannableString colorWords(String str, int endIndex, int color) {
-        return colorWords(str, 0, endIndex, color);
-    }
-
-    public static SpannableString colorWords(String str, int startIndex, int endIndex, int color) {
-        SpannableString ss = new SpannableString(str);
-        ss.setSpan(new ForegroundColorSpan(color), startIndex, endIndex, 0);
-        return ss;
-    }
-
-    public static Drawable getColoredDrawable(Context context, int resId, int color) {
+    public static Drawable setDrawableTint(Context context, @DrawableRes int resId, @ColorInt int color) {
         Drawable drawable;
         if (Build.VERSION.SDK_INT >= 21) {
             drawable = context.getResources().getDrawable(resId, context.getTheme());
         } else {
             drawable = context.getResources().getDrawable(resId);
-            drawable = DrawableCompat.wrap(drawable);
         }
+        return setDrawableTint(drawable, color);
+    }
+
+    public static Drawable setDrawableTint(Drawable drawable, @ColorInt int color) {
+        drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, color);
         return drawable;
     }
 
     public static int getDarkerColor(int color) {
+        return getDarkerColor(color, 0.8f);
+    }
+
+    public static int getDarkerColor(@ColorInt int color, float darkerAmount) {
         Color.colorToHSV(color, hsv);
-        hsv[2] *= 0.8f; // value component
+        hsv[2] *= darkerAmount;
         return Color.HSVToColor(hsv);
     }
 
@@ -232,7 +228,7 @@ public class Easel {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             editText.setBackgroundTintList(editTextColorStateList);
         }
-        setCursorDrawableColor(editText, color);
+        setCursorTint(editText, color);
     }
 
     public static void setTint(@NonNull CheckBox box, @ColorInt int color) {
@@ -258,7 +254,7 @@ public class Easel {
      * @param editText editText to change the cursor color
      * @param color color to change the cursor to
      */
-    public static void setCursorDrawableColor(EditText editText, int color) {
+    public static void setCursorTint(@NonNull EditText editText, @ColorInt int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);
@@ -278,5 +274,23 @@ public class Easel {
         } catch (Exception ignored) {
             throw new IllegalStateException("Something went wrong setting the cursor color");
         }
+    }
+
+    /**
+     * Sets the color of the overflow menu item. You most likely need to use a {@link android.view.ViewTreeObserver.OnGlobalLayoutListener} with this to make it work since
+     * the color cannot be applied until the overflow icon exists
+     * @param activity activity
+     * @param color color to set the overflow icon to
+     */
+    public static void setOverflowTint(@NonNull Activity activity, @ColorInt int color) {
+        final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
+        final ArrayList<View> outViews = new ArrayList<>();
+        activity.getWindow().getDecorView().findViewsWithText(outViews, overflowDescription,
+                View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+        if (outViews.isEmpty()) {
+            return;
+        }
+        TintImageView overflow=(TintImageView) outViews.get(0);
+        overflow.setColorFilter(color);
     }
 }
