@@ -37,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
         Easel.setTint(switchCompat, Color.MAGENTA);
         Easel.setTint(progressBar, Color.MAGENTA);
         Easel.setTint(seekBar, Color.MAGENTA);
-        Animator animator = Easel.getStatusBarColorAnimator(getWindow(), Color.MAGENTA);
-        animator.setDuration(500);
-        animator.start();
-        Animator navAnimator = Easel.getNavigationBarColorAnimator(getWindow(), Color.MAGENTA);
-        navAnimator.setDuration(500);
-        navAnimator.start();
+        if (Build.VERSION.SDK_INT >= 21) {
+            Animator animator = Easel.getStatusBarColorAnimator(getWindow(), Color.MAGENTA);
+            animator.setDuration(500);
+            animator.start();
+            Animator navAnimator = Easel.getNavigationBarColorAnimator(getWindow(), Color.MAGENTA);
+            navAnimator.setDuration(500);
+            navAnimator.start();
+        }
     }
 
     @Override

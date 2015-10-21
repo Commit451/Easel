@@ -17,7 +17,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.internal.widget.ThemeUtils;
-import android.support.v7.internal.widget.TintImageView;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
@@ -295,7 +295,7 @@ public class Easel {
         if (outViews.isEmpty()) {
             return;
         }
-        TintImageView overflow=(TintImageView) outViews.get(0);
+        ImageView overflow=(ImageView) outViews.get(0);
         overflow.setColorFilter(color);
     }
 
