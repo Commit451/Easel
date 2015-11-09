@@ -3,12 +3,12 @@ apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
+        versionCode 100
         versionName "1.0"
     }
     buildTypes {
@@ -27,11 +27,12 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
 }
 
+// ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 publish {
     userOrg = 'commit451'
     groupId = 'com.commit451'
     artifactId = 'easel'
-    publishVersion = '0.0.1'
+    publishVersion = '0.0.3'
     desc = 'Tint Android widgets and views with ease'
     website = 'https://github.com/Commit451/Easel'
 }
