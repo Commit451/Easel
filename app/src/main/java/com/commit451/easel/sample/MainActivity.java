@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -31,12 +32,14 @@ public class MainActivity extends AppCompatActivity {
         SwitchCompat switchCompat = (SwitchCompat) findViewById(R.id.switchCompat);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
+        Button button = (Button) findViewById(R.id.button);
         Easel.setTint(editText, Color.MAGENTA);
         Easel.setTint(radioButton, Color.MAGENTA);
         Easel.setTint(checkBox, Color.MAGENTA);
         Easel.setTint(switchCompat, Color.MAGENTA);
         Easel.setTint(progressBar, Color.MAGENTA);
         Easel.setTint(seekBar, Color.MAGENTA);
+        Easel.setTint(button, Color.MAGENTA, Color.BLUE);
         if (Build.VERSION.SDK_INT >= 21) {
             Animator animator = Easel.getStatusBarColorAnimator(getWindow(), Color.MAGENTA);
             animator.setDuration(500);

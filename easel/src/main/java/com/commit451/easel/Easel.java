@@ -16,6 +16,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.internal.widget.ThemeUtils;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,7 +37,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
- * Apply tinting to widgets, drawables, and various other things through Easel
+ * Apply tinting to widgets, drawables, all the color things you would ever need!
  * Created by Jawn on 7/28/2015.
  */
 public class Easel {
@@ -43,7 +45,14 @@ public class Easel {
     private static float[] hsv = new float[3];
     private static ArgbEvaluator sArgbEvaluator = new ArgbEvaluator();
 
-    public static Drawable setDrawableTint(Context context, @DrawableRes int resId, @ColorInt int color) {
+    /**
+     * Simplified way of getting a drawable and tinting it to a certain color
+     * @param context context
+     * @param resId the drawable resource ID
+     * @param color the color to tint the drawable to
+     * @return the tinted drawable
+     */
+    public static Drawable getTintedDrawable(Context context, @DrawableRes int resId, @ColorInt int color) {
         Drawable drawable;
         if (Build.VERSION.SDK_INT >= 21) {
             drawable = context.getResources().getDrawable(resId, context.getTheme());
@@ -53,16 +62,33 @@ public class Easel {
         return setDrawableTint(drawable, color);
     }
 
+    /**
+     * Simplified way of tinting a drawable to a certain color
+     * @param drawable the drawable to tint
+     * @param color the color to tint the drawable to
+     * @return the tinted drawable
+     */
     public static Drawable setDrawableTint(Drawable drawable, @ColorInt int color) {
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, color);
         return drawable;
     }
 
-    public static int getDarkerColor(int color) {
+    /**
+     * Get a darker version of the specified color (20% darker)
+     * @param color starting color
+     * @return darker color
+     */
+    public static int getDarkerColor(@ColorInt int color) {
         return getDarkerColor(color, 0.8f);
     }
 
+    /**
+     * Get a darker version of the color based on the ratio
+     * @param color starting color
+     * @param darkerAmount value between 0 and 1 to darken the color by
+     * @return
+     */
     public static int getDarkerColor(@ColorInt int color, float darkerAmount) {
         Color.colorToHSV(color, hsv);
         hsv[2] *= darkerAmount;
@@ -79,8 +105,13 @@ public class Easel {
         return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
     }
 
-    public static int getBackgroundColor(View v) {
-        Drawable background = v.getBackground();
+    /**
+     * Given a view with a {@link ColorDrawable} background, extracts the color
+     * @param view to extract the background color from
+     * @return
+     */
+    public static int getBackgroundColor(View view) {
+        Drawable background = view.getBackground();
         if (background instanceof ColorDrawable) {
             return ((ColorDrawable) background).getColor();
         } else {
@@ -241,7 +272,7 @@ public class Easel {
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         }, new int[]{
-                ThemeUtils.getThemeAttrColor(box.getContext(), R.attr.colorControlNormal),
+                ThemeUtils.getThemeAttrColor(box.getContext(), R.attr.colorControlHighlight),
                 color
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -251,6 +282,15 @@ public class Easel {
             DrawableCompat.setTintList(drawable, sl);
             box.setButtonDrawable(drawable);
         }
+    }
+
+    public static void setTint(@NonNull Button button, @ColorInt int color, @ColorInt int pressedColor) {
+        ColorStateList sl = new ColorStateList(new int[][]{
+                new int[]{}
+        }, new int[]{
+                color
+        });
+        ViewCompat.setBackgroundTintList(button, sl);
     }
 
     /**
@@ -299,9 +339,16 @@ public class Easel {
         overflow.setColorFilter(color);
     }
 
-    public static ObjectAnimator getBackgroundColorAnimator(View v, int endColor) {
-        return ObjectAnimator.ofObject(v, "backgroundColor", sArgbEvaluator,
-                getBackgroundColor(v), endColor);
+    /**
+     * Gets an animator for the view that will animate between the current background color
+     * and the specified end color
+     * @param view view to apply animation to
+     * @param endColor the color to animate to
+     * @return ObjectAnimator to customize and control
+     */
+    public static ObjectAnimator getBackgroundColorAnimator(View view, int endColor) {
+        return ObjectAnimator.ofObject(view, "backgroundColor", sArgbEvaluator,
+                getBackgroundColor(view), endColor);
     }
 
     @TargetApi(21)
