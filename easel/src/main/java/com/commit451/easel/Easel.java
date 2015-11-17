@@ -17,9 +17,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.internal.widget.ThemeUtils;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +44,7 @@ public class Easel {
 
     private static float[] hsv = new float[3];
     private static ArgbEvaluator sArgbEvaluator = new ArgbEvaluator();
+    private static TypedValue sTypedValue = new TypedValue();
 
     /**
      * Simplified way of getting a drawable and tinting it to a certain color
@@ -95,6 +96,11 @@ public class Easel {
         return Color.HSVToColor(hsv);
     }
 
+    public static int getThemeAttrColor(Context context, int attributeColor) {
+        context.getTheme().resolveAttribute(attributeColor, sTypedValue, true);
+        return sTypedValue.data;
+    }
+
     /**
      * Gets the color with the alpha changed by a factor.
      * @param color original color
@@ -120,7 +126,7 @@ public class Easel {
     }
 
     public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
-        setTint(switchCompat, color, ThemeUtils.getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
+        setTint(switchCompat, color, getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
     }
 
     public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color, @ColorInt int unpressedColor) {
@@ -143,7 +149,7 @@ public class Easel {
 
             // Disabled state
             states[i] = new int[] { -android.R.attr.state_enabled };
-        colors[i] = adjustAlpha(ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal), 0.1f);
+        colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.1f);
             i++;
 
             states[i] = new int[] { android.R.attr.state_checked };
@@ -152,7 +158,7 @@ public class Easel {
 
             // Default enabled state
             states[i] = new int[0];
-        colors[i] = adjustAlpha(ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f);
+        colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f);
             i++;
 
         return new ColorStateList(states, colors);
@@ -181,7 +187,7 @@ public class Easel {
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         }, new int[]{
-                ThemeUtils.getThemeAttrColor(radioButton.getContext(), R.attr.colorControlNormal),
+                getThemeAttrColor(radioButton.getContext(), R.attr.colorControlNormal),
                 color
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -247,10 +253,10 @@ public class Easel {
         int[] colors = new int[3];
         int i = 0;
         states[i] = new int[]{-android.R.attr.state_enabled};
-        colors[i] = ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal);
+        colors[i] = getThemeAttrColor(context, R.attr.colorControlNormal);
         i++;
         states[i] = new int[]{-android.R.attr.state_pressed, -android.R.attr.state_focused};
-        colors[i] = ThemeUtils.getThemeAttrColor(context, R.attr.colorControlNormal);
+        colors[i] = getThemeAttrColor(context, R.attr.colorControlNormal);
         i++;
         states[i] = new int[]{};
         colors[i] = color;
@@ -272,7 +278,7 @@ public class Easel {
                 new int[]{-android.R.attr.state_checked},
                 new int[]{android.R.attr.state_checked}
         }, new int[]{
-                ThemeUtils.getThemeAttrColor(box.getContext(), R.attr.colorControlHighlight),
+                getThemeAttrColor(box.getContext(), R.attr.colorControlHighlight),
                 color
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
