@@ -2,6 +2,7 @@ package com.commit451.easel;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.ViewCompat;
@@ -317,14 +319,22 @@ public class Easel {
             Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
             fCursorDrawable.setAccessible(true);
             Drawable[] drawables = new Drawable[2];
-            drawables[0] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
-            drawables[1] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
-            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
-            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+            drawables[0] = tintDrawable(drawables[0], color);
+            drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
+            drawables[1] = tintDrawable(drawables[1], color);
             fCursorDrawable.set(editor, drawables);
-        } catch (Exception ignored) {
-            throw new IllegalStateException("Something went wrong setting the cursor color");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    @Nullable
+    public static Drawable tintDrawable(@Nullable Drawable drawable, @ColorInt int color) {
+        if (drawable == null) return null;
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, color);
+        return drawable;
     }
 
     /**
@@ -334,6 +344,7 @@ public class Easel {
      * @param color color to set the overflow icon to
      */
     public static void setOverflowTint(@NonNull Activity activity, @ColorInt int color) {
+        @SuppressLint("PrivateResource")
         final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
         final ArrayList<View> outViews = new ArrayList<>();
         activity.getWindow().getDecorView().findViewsWithText(outViews, overflowDescription,
