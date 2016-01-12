@@ -7,11 +7,13 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.annotation.AttrRes;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -56,13 +58,7 @@ public class Easel {
      * @return the tinted drawable
      */
     public static Drawable getTintedDrawable(Context context, @DrawableRes int resId, @ColorInt int color) {
-        Drawable drawable;
-        if (Build.VERSION.SDK_INT >= 21) {
-            drawable = context.getResources().getDrawable(resId, context.getTheme());
-        } else {
-            drawable = context.getResources().getDrawable(resId);
-        }
-        return setDrawableTint(drawable, color);
+        return setDrawableTint(ContextCompat.getDrawable(context, resId), color);
     }
 
     /**
@@ -98,9 +94,18 @@ public class Easel {
         return Color.HSVToColor(hsv);
     }
 
-    public static int getThemeAttrColor(Context context, int attributeColor) {
+    public static int getThemeAttrColor(Context context, @AttrRes int attributeColor) {
         context.getTheme().resolveAttribute(attributeColor, sTypedValue, true);
         return sTypedValue.data;
+    }
+
+    @Nullable
+    public static Drawable getThemeAttrDrawable(Context context, @AttrRes int attributeDrawable) {
+        int[] attrs = new int[] { attributeDrawable };
+        TypedArray ta = context.obtainStyledAttributes(attrs);
+        Drawable drawableFromTheme = ta.getDrawable(0);
+        ta.recycle();
+        return drawableFromTheme;
     }
 
     /**

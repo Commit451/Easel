@@ -32,7 +32,7 @@ publish {
     userOrg = 'commit451'
     groupId = 'com.commit451'
     artifactId = 'easel'
-    publishVersion = '0.0.3'
+    publishVersion = '0.0.5'
     desc = 'Tint Android widgets and views with ease'
     website = 'https://github.com/Commit451/Easel'
 }
