@@ -1,14 +1,14 @@
 # Easel
 Tint Android widgets and views with ease
 
-[![Build Status](https://travis-ci.org/Commit451/Easel.svg?branch=master)](https://travis-ci.org/Commit451/Easel)
+[![Build Status](https://travis-ci.org/Commit451/Easel.svg?branch=master)](https://travis-ci.org/Commit451/Easel) [![](https://jitpack.io/v/Commit451/Easel.svg)](https://jitpack.io/#Commit451/Easel)
 
 # Gradle Dependency
 Easily reference the library in your Android projects using this dependency in your module's `build.gradle` file:
 
 ```Gradle
 dependencies {
-    compile 'com.commit451:easel:0.0.3'
+    compile 'com.github.Commit451:Easel:1.0.0'
 }
 ```
 

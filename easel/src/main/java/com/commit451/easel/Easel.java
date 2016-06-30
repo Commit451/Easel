@@ -42,7 +42,6 @@ import java.util.ArrayList;
 
 /**
  * Apply tinting to widgets, drawables, all the color things you would ever need!
- * Created by Jawn on 7/28/2015.
  */
 public class Easel {
 
@@ -52,9 +51,10 @@ public class Easel {
 
     /**
      * Simplified way of getting a drawable and tinting it to a certain color
+     *
      * @param context context
-     * @param resId the drawable resource ID
-     * @param color the color to tint the drawable to
+     * @param resId   the drawable resource ID
+     * @param color   the color to tint the drawable to
      * @return the tinted drawable
      */
     public static Drawable getTintedDrawable(Context context, @DrawableRes int resId, @ColorInt int color) {
@@ -63,8 +63,9 @@ public class Easel {
 
     /**
      * Simplified way of tinting a drawable to a certain color
+     *
      * @param drawable the drawable to tint
-     * @param color the color to tint the drawable to
+     * @param color    the color to tint the drawable to
      * @return the tinted drawable
      */
     public static Drawable setDrawableTint(Drawable drawable, @ColorInt int color) {
@@ -75,6 +76,7 @@ public class Easel {
 
     /**
      * Get a darker version of the specified color (20% darker)
+     *
      * @param color starting color
      * @return darker color
      */
@@ -84,9 +86,10 @@ public class Easel {
 
     /**
      * Get a darker version of the color based on the ratio
-     * @param color starting color
+     *
+     * @param color        starting color
      * @param darkerAmount value between 0 and 1 to darken the color by
-     * @return
+     * @return darker color
      */
     public static int getDarkerColor(@ColorInt int color, float darkerAmount) {
         Color.colorToHSV(color, hsv);
@@ -101,7 +104,7 @@ public class Easel {
 
     @Nullable
     public static Drawable getThemeAttrDrawable(Context context, @AttrRes int attributeDrawable) {
-        int[] attrs = new int[] { attributeDrawable };
+        int[] attrs = new int[]{attributeDrawable};
         TypedArray ta = context.obtainStyledAttributes(attrs);
         Drawable drawableFromTheme = ta.getDrawable(0);
         ta.recycle();
@@ -110,9 +113,10 @@ public class Easel {
 
     /**
      * Gets the color with the alpha changed by a factor.
-     * @param color original color
+     *
+     * @param color  original color
      * @param factor factor, such as 0.5f for 50%
-     * @return
+     * @return the color with the adjusted alpha
      */
     public static int adjustAlpha(int color, float factor) {
         return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
@@ -120,8 +124,9 @@ public class Easel {
 
     /**
      * Given a view with a {@link ColorDrawable} background, extracts the color
+     *
      * @param view to extract the background color from
-     * @return
+     * @return the background color
      */
     public static int getBackgroundColor(View view) {
         Drawable background = view.getBackground();
@@ -150,23 +155,23 @@ public class Easel {
     }
 
     private static ColorStateList getSwitchTrackColorStateList(Context context, @ColorInt int color) {
-            final int[][] states = new int[3][];
-            final int[] colors = new int[3];
-            int i = 0;
+        final int[][] states = new int[3][];
+        final int[] colors = new int[3];
+        int i = 0;
 
-            // Disabled state
-            states[i] = new int[] { -android.R.attr.state_enabled };
+        // Disabled state
+        states[i] = new int[]{-android.R.attr.state_enabled};
         colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.1f);
-            i++;
+        i++;
 
-            states[i] = new int[] { android.R.attr.state_checked };
+        states[i] = new int[]{android.R.attr.state_checked};
         colors[i] = adjustAlpha(color, 0.3f);
-            i++;
+        i++;
 
-            // Default enabled state
-            states[i] = new int[0];
+        // Default enabled state
+        states[i] = new int[0];
         colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f);
-            i++;
+        i++;
 
         return new ColorStateList(states, colors);
     }
@@ -309,8 +314,9 @@ public class Easel {
     /**
      * Sets the cursor color of the EditText. Kinda hacky using reflection, but it gets the job done.
      * http://stackoverflow.com/questions/25996032/how-to-change-programatically-edittext-cursor-color-in-android
+     *
      * @param editText editText to change the cursor color
-     * @param color color to change the cursor to
+     * @param color    color to change the cursor to
      */
     public static void setCursorTint(@NonNull EditText editText, @ColorInt int color) {
         try {
@@ -345,8 +351,9 @@ public class Easel {
     /**
      * Sets the color of the overflow menu item. You most likely need to use a {@link android.view.ViewTreeObserver.OnGlobalLayoutListener} with this to make it work since
      * the color cannot be applied until the overflow icon exists
+     *
      * @param activity activity
-     * @param color color to set the overflow icon to
+     * @param color    color to set the overflow icon to
      */
     public static void setOverflowTint(@NonNull Activity activity, @ColorInt int color) {
         @SuppressLint("PrivateResource")
@@ -357,14 +364,15 @@ public class Easel {
         if (outViews.isEmpty()) {
             return;
         }
-        ImageView overflow=(ImageView) outViews.get(0);
+        ImageView overflow = (ImageView) outViews.get(0);
         overflow.setColorFilter(color);
     }
 
     /**
      * Gets an animator for the view that will animate between the current background color
      * and the specified end color
-     * @param view view to apply animation to
+     *
+     * @param view     view to apply animation to
      * @param endColor the color to animate to
      * @return ObjectAnimator to customize and control
      */
