@@ -2,8 +2,11 @@ package com.commit451.easel.sample;
 
 import android.animation.Animator;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.view.Menu;
@@ -48,6 +51,22 @@ public class MainActivity extends AppCompatActivity {
             navAnimator.setDuration(500);
             navAnimator.start();
         }
+        final NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollview);
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                scrollView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Drawable verticalTrackDrawable = Easel.getVerticalTrackDrawable(scrollView);
+                        verticalTrackDrawable.setColorFilter(Color.MAGENTA, PorterDuff.Mode.MULTIPLY);
+                    }
+                }, 100);
+
+            }
+        });
+
+
     }
 
     @Override

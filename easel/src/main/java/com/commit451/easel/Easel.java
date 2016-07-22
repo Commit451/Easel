@@ -369,6 +369,34 @@ public class Easel {
     }
 
     /**
+     * BEWARE: this uses reflection and is kinda hacky, so use with caution
+     * @param view a view
+     * @return the scrollable track drawable
+     */
+    @Nullable
+    public static Drawable getVerticalTrackDrawable(View view) {
+
+        try {
+            //TODO init method which optimizes by pulling out fields at once such as this?
+            Field scrollCacheField = View.class.getDeclaredField("mScrollCache");
+            scrollCacheField.setAccessible(true);
+            Object scrollcache = scrollCacheField.get(view);
+            //got the cache, now get the drawable
+            Field scrollBarDrawableField = scrollcache.getClass().getDeclaredField("scrollBar");
+            scrollBarDrawableField.setAccessible(true);
+            Object scrollBarDrawable = scrollBarDrawableField.get(scrollcache);
+            //got the scrollbardrawable, now get the vertical drawable
+            Class<?> scrollBarDrawableClass = Class.forName("android.widget.ScrollBarDrawable");
+            Field verticalTrackField = scrollBarDrawableClass.getDeclaredField("mVerticalTrack");
+            verticalTrackField.setAccessible(true);
+            Drawable drawable = (Drawable) verticalTrackField.get(scrollBarDrawable);
+            return drawable;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * Gets an animator for the view that will animate between the current background color
      * and the specified end color
      *
