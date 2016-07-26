@@ -317,8 +317,9 @@ public class Easel {
      *
      * @param editText editText to change the cursor color
      * @param color    color to change the cursor to
+     * @return true if cursor was successfully tinted, false if Android has changed the field names and reflection has failed us
      */
-    public static void setCursorTint(@NonNull EditText editText, @ColorInt int color) {
+    public static boolean setCursorTint(@NonNull EditText editText, @ColorInt int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);
@@ -336,8 +337,9 @@ public class Easel {
             drawables[1] = tintDrawable(drawables[1], color);
             fCursorDrawable.set(editor, drawables);
         } catch (Exception e) {
-            e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     @Nullable
