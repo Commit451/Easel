@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EdgeEffect;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -356,18 +357,43 @@ public class Easel {
      *
      * @param activity activity
      * @param color    color to set the overflow icon to
+     * @return true if tint was set.
      */
-    public static void setOverflowTint(@NonNull Activity activity, @ColorInt int color) {
+    public static boolean setOverflowTint(@NonNull Activity activity, @ColorInt int color) {
         @SuppressLint("PrivateResource")
         final String overflowDescription = activity.getString(R.string.abc_action_menu_overflow_description);
         final ArrayList<View> outViews = new ArrayList<>();
         activity.getWindow().getDecorView().findViewsWithText(outViews, overflowDescription,
                 View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
         if (outViews.isEmpty()) {
-            return;
+            return false;
         }
         ImageView overflow = (ImageView) outViews.get(0);
         overflow.setColorFilter(color);
+        return true;
+    }
+
+    @TargetApi(21)
+    public static boolean setEdgeEffect(View scrollableView, int color) {
+        //http://stackoverflow.com/questions/27104521/android-lollipop-scrollview-edge-effect-color
+        boolean outcome = false;
+        final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
+        for (String edgeGlow : edgeGlows) {
+            Class<?> clazz = scrollableView.getClass();
+            while (clazz != null) {
+                try {
+                    final Field edgeGlowField = clazz.getDeclaredField(edgeGlow);
+                    edgeGlowField.setAccessible(true);
+                    final EdgeEffect edgeEffect = (EdgeEffect) edgeGlowField.get(scrollableView);
+                    edgeEffect.setColor(color);
+                    outcome = true;
+                    break;
+                } catch (Exception e) {
+                    clazz = clazz.getSuperclass();
+                }
+            }
+        }
+        return outcome;
     }
 
     /**
