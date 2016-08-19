@@ -4,9 +4,17 @@ Tint Android widgets and views with ease
 [![Build Status](https://travis-ci.org/Commit451/Easel.svg?branch=master)](https://travis-ci.org/Commit451/Easel) [![](https://jitpack.io/v/Commit451/Easel.svg)](https://jitpack.io/#Commit451/Easel)
 
 # Gradle Dependency
-Easily reference the library in your Android projects using this dependency in your module's `build.gradle` file:
-
-```Gradle
+Add the jitpack url to the project:
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+then, in your app `build.gradle`
+```groovy
 dependencies {
     compile 'com.github.Commit451:Easel:1.0.0'
 }
