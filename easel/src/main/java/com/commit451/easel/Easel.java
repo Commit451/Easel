@@ -97,11 +97,23 @@ public class Easel {
         return Color.HSVToColor(hsv);
     }
 
+    /**
+     * Get a color from the attribute theme
+     * @param context theme context
+     * @param attributeColor the attribute color, ex R.attr.colorPrimary
+     * @return the color
+     */
     public static int getThemeAttrColor(Context context, @AttrRes int attributeColor) {
         context.getTheme().resolveAttribute(attributeColor, sTypedValue, true);
         return sTypedValue.data;
     }
 
+    /**
+     * Get a drawable from the attribute theme
+     * @param context theme context
+     * @param attributeDrawable the attribute drawable, ex R.attr.selectableItemBackground
+     * @return the drawable, if it exists in the theme context
+     */
     @Nullable
     public static Drawable getThemeAttrDrawable(Context context, @AttrRes int attributeDrawable) {
         int[] attrs = new int[]{attributeDrawable};
