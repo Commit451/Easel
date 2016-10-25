@@ -1,6 +1,5 @@
 package com.commit451.easel.sample;
 
-import android.animation.Animator;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,14 +39,6 @@ public class MainActivity extends AppCompatActivity {
         Easel.setTint(progressBar, Color.MAGENTA);
         Easel.setTint(seekBar, Color.MAGENTA);
         Easel.setTint(button, Color.MAGENTA, Color.BLUE);
-        if (Build.VERSION.SDK_INT >= 21) {
-            Animator animator = Easel.getStatusBarColorAnimator(getWindow(), Color.MAGENTA);
-            animator.setDuration(500);
-            animator.start();
-            Animator navAnimator = Easel.getNavigationBarColorAnimator(getWindow(), Color.MAGENTA);
-            navAnimator.setDuration(500);
-            navAnimator.start();
-        }
     }
 
     @Override
