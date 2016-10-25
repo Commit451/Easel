@@ -1,7 +1,5 @@
 package com.commit451.easel;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -27,7 +25,6 @@ import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EdgeEffect;
@@ -47,7 +44,6 @@ import java.util.ArrayList;
 public class Easel {
 
     private static float[] hsv = new float[3];
-    private static ArgbEvaluator sArgbEvaluator = new ArgbEvaluator();
     private static TypedValue sTypedValue = new TypedValue();
 
     /**
@@ -406,30 +402,5 @@ public class Easel {
             }
         }
         return outcome;
-    }
-
-    /**
-     * Gets an animator for the view that will animate between the current background color
-     * and the specified end color
-     *
-     * @param view     view to apply animation to
-     * @param endColor the color to animate to
-     * @return ObjectAnimator to customize and control
-     */
-    public static ObjectAnimator getBackgroundColorAnimator(View view, int endColor) {
-        return ObjectAnimator.ofObject(view, "backgroundColor", sArgbEvaluator,
-                getBackgroundColor(view), endColor);
-    }
-
-    @TargetApi(21)
-    public static ObjectAnimator getStatusBarColorAnimator(Window window, int endColor) {
-        return ObjectAnimator.ofObject(window, "statusBarColor", sArgbEvaluator,
-                window.getStatusBarColor(), endColor);
-    }
-
-    @TargetApi(21)
-    public static ObjectAnimator getNavigationBarColorAnimator(Window window, int endColor) {
-        return ObjectAnimator.ofObject(window, "navigationBarColor", sArgbEvaluator,
-                window.getNavigationBarColor(), endColor);
     }
 }
