@@ -8,7 +8,6 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.AttrRes;
@@ -129,21 +128,6 @@ public class Easel {
      */
     public static int adjustAlpha(int color, float factor) {
         return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
-    }
-
-    /**
-     * Given a view with a {@link ColorDrawable} background, extracts the color
-     *
-     * @param view to extract the background color from
-     * @return the background color
-     */
-    public static int getBackgroundColor(View view) {
-        Drawable background = view.getBackground();
-        if (background instanceof ColorDrawable) {
-            return ((ColorDrawable) background).getColor();
-        } else {
-            throw new IllegalArgumentException("View must have a ColorDrawable background");
-        }
     }
 
     public static void setTint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
@@ -310,7 +294,7 @@ public class Easel {
         }
     }
 
-    public static void setTint(@NonNull Button button, @ColorInt int color, @ColorInt int pressedColor) {
+    public static void setTint(@NonNull Button button, @ColorInt int color) {
         ColorStateList sl = new ColorStateList(new int[][]{
                 new int[]{}
         }, new int[]{

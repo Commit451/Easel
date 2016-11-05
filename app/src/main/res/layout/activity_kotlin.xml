@@ -16,4 +16,15 @@
         android:text="New edit text"
         android:id="@+id/editText"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No custom pressed"/>
+
+    <Button
+        android:id="@+id/button_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="with custom pressed"/>
+
 </LinearLayout>
