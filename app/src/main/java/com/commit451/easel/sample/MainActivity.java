@@ -1,5 +1,6 @@
 package com.commit451.easel.sample;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         Easel.setTint(progressBar, Color.MAGENTA);
         Easel.setTint(seekBar, Color.MAGENTA);
         Easel.setTint(button, Color.MAGENTA, Color.BLUE);
+        findViewById(R.id.button_kotlin).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, KotlinActivity.class));
+            }
+        });
     }
 
     @Override

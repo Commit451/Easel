@@ -78,7 +78,7 @@ public class Easel {
      * @return darker color
      */
     public static int getDarkerColor(@ColorInt int color) {
-        return getDarkerColor(color, 0.8f);
+        return getDarkerColor(color, 0.9f);
     }
 
     /**
@@ -180,7 +180,6 @@ public class Easel {
         // Default enabled state
         states[i] = new int[0];
         colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f);
-        i++;
 
         return new ColorStateList(states, colors);
     }
