@@ -1,5 +1,5 @@
 # Easel
-Tint Android widgets and views with ease
+Tint and color Android views with ease
 
 [![Build Status](https://travis-ci.org/Commit451/Easel.svg?branch=master)](https://travis-ci.org/Commit451/Easel) [![](https://jitpack.io/v/Commit451/Easel.svg)](https://jitpack.io/#Commit451/Easel)
 
@@ -16,7 +16,9 @@ allprojects {
 then, in your app `build.gradle`
 ```groovy
 dependencies {
-    compile 'com.github.Commit451:Easel:1.0.0'
+    compile 'com.github.Commit451.Easel:easel:latest.version.here'
+    //and, for kotlin extensions
+    compile 'com.github.Commit451.Easel:easel-kotlin:latest.version.here'
 }
 ```
 
@@ -25,6 +27,13 @@ See sample project for clear usage. Mostly looks like this:
 ```java
 Easel.setTint(checkBox, color);
 ```
+If you are using Kotlin, extensions methods make it even easier:
+```kotlin
+checkbox.setTint(color)
+```
+
+# Thanks
+Props to the project [Material Dialogs](https://github.com/afollestad/material-dialogs/blob/master/core/src/main/java/com/afollestad/materialdialogs/internal/MDTintHelper.java) where a lot of the tinting code came from.
 
 License
 --------
