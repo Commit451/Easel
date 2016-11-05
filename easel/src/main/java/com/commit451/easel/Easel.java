@@ -71,7 +71,7 @@ public class Easel {
     }
 
     /**
-     * Get a darker version of the specified color (20% darker)
+     * Get a darker version of the specified color (10% darker)
      *
      * @param color starting color
      * @return darker color

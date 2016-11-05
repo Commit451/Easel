@@ -18,6 +18,6 @@ class KotlinActivity : AppCompatActivity() {
         editText.setCursorTint(Color.RED)
 
         var button = findViewById(R.id.button_custom) as Button
-        button.setTint(Color.RED, Color.BLUE)
+        button.setTint(Color.RED)
     }
 }
