@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         Easel.setTint(switchCompat, Color.MAGENTA);
         Easel.setTint(progressBar, Color.MAGENTA);
         Easel.setTint(seekBar, Color.MAGENTA);
-        Easel.setTint(button, Color.MAGENTA, Color.BLUE);
+        Easel.setTint(button, Color.MAGENTA);
         findViewById(R.id.button_kotlin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
