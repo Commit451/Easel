@@ -6,8 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -15,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.SeekBar;
 
 import com.commit451.easel.Easel;
@@ -26,6 +26,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Easel");
+        toolbar.inflateMenu(R.menu.menu_main);
+        Easel.tint(toolbar.getMenu(), Color.MAGENTA);
+
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollview);
+        Easel.tintEdgeEffect(scrollView, Color.MAGENTA);
+
+        final ViewTreeObserver viewTreeObserver = getWindow().getDecorView().getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Easel.tintOverflow(toolbar, Color.MAGENTA);
+                removeOnGlobalLayoutListener(getWindow().getDecorView(), this);
+            }
+        });
+
         EditText editText = (EditText) findViewById(R.id.editText);
         RadioButton radioButton = (RadioButton) findViewById(R.id.radioButton);
         CheckBox checkBox = (CheckBox) findViewById(R.id.checkBox);
@@ -33,36 +50,19 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         Button button = (Button) findViewById(R.id.button);
-        Easel.setTint(editText, Color.MAGENTA);
-        Easel.setTint(radioButton, Color.MAGENTA);
-        Easel.setTint(checkBox, Color.MAGENTA);
-        Easel.setTint(switchCompat, Color.MAGENTA);
-        Easel.setTint(progressBar, Color.MAGENTA);
-        Easel.setTint(seekBar, Color.MAGENTA);
-        Easel.setTint(button, Color.MAGENTA);
+        Easel.tint(editText, Color.MAGENTA);
+        Easel.tint(radioButton, Color.MAGENTA);
+        Easel.tint(checkBox, Color.MAGENTA);
+        Easel.tint(switchCompat, Color.MAGENTA);
+        Easel.tint(progressBar, Color.MAGENTA);
+        Easel.tint(seekBar, Color.MAGENTA);
+        Easel.tint(button, Color.MAGENTA);
         findViewById(R.id.button_kotlin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, KotlinActivity.class));
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        Easel.setTint(menu, Color.MAGENTA);
-
-        final ViewTreeObserver viewTreeObserver = getWindow().getDecorView().getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Easel.setOverflowTint(MainActivity.this, Color.MAGENTA);
-                removeOnGlobalLayoutListener(getWindow().getDecorView(), this);
-            }
-        });
-        return true;
     }
 
     public void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
@@ -72,19 +72,5 @@ public class MainActivity extends AppCompatActivity {
         else {
             v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_share:
-
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

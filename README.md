@@ -25,11 +25,11 @@ dependencies {
 # Usage
 See sample project for clear usage. Mostly looks like this:
 ```java
-Easel.setTint(checkBox, color);
+Easel.tint(checkBox, color);
 ```
 If you are using Kotlin, extensions methods make it even easier:
 ```kotlin
-checkbox.setTint(color)
+checkbox.tint(color)
 ```
 
 # Thanks
