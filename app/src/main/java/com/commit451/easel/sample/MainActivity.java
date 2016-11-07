@@ -2,13 +2,11 @@ package com.commit451.easel.sample;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -30,18 +28,10 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Easel");
         toolbar.inflateMenu(R.menu.menu_main);
         Easel.tint(toolbar.getMenu(), Color.MAGENTA);
+        Easel.tintOverflow(toolbar, Color.MAGENTA);
 
         ScrollView scrollView = (ScrollView) findViewById(R.id.scrollview);
         Easel.tintEdgeEffect(scrollView, Color.MAGENTA);
-
-        final ViewTreeObserver viewTreeObserver = getWindow().getDecorView().getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                Easel.tintOverflow(toolbar, Color.MAGENTA);
-                removeOnGlobalLayoutListener(getWindow().getDecorView(), this);
-            }
-        });
 
         EditText editText = (EditText) findViewById(R.id.editText);
         RadioButton radioButton = (RadioButton) findViewById(R.id.radioButton);
@@ -63,14 +53,5 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, KotlinActivity.class));
             }
         });
-    }
-
-    public void removeOnGlobalLayoutListener(View v, ViewTreeObserver.OnGlobalLayoutListener listener) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-            v.getViewTreeObserver().removeGlobalOnLayoutListener(listener);
-        }
-        else {
-            v.getViewTreeObserver().removeOnGlobalLayoutListener(listener);
-        }
     }
 }

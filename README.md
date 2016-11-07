@@ -32,6 +32,23 @@ If you are using Kotlin, extensions methods make it even easier:
 checkbox.tint(color)
 ```
 
+# Currently Supported Views
+Currently, you can tint the following views at run time:
+- Button
+- Checkbox
+- EditText
+- ProgressBar
+- RadioButton
+- SeekBar
+- SwitchCompat
+
+In addition, you can also tint other things which are somewhat difficult to tint in Android, such as:
+- Drawable
+- EditText cursor
+- MenuItem
+- Toolbar overflow
+- View Edget effect (on scroll)
+
 # Thanks
 Props to the project [Material Dialogs](https://github.com/afollestad/material-dialogs/blob/master/core/src/main/java/com/afollestad/materialdialogs/internal/MDTintHelper.java) where a lot of the tinting code came from.
 

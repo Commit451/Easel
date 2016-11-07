@@ -42,31 +42,6 @@ import java.util.ArrayList;
 public class Easel {
 
     /**
-     * Simplified way of getting a drawable and tinting it to a certain color
-     *
-     * @param context context
-     * @param resId   the drawable resource ID
-     * @param color   the color to tint the drawable to
-     * @return the tinted drawable
-     */
-    public static Drawable tint(Context context, @DrawableRes int resId, @ColorInt int color) {
-        return tint(ContextCompat.getDrawable(context, resId), color);
-    }
-
-    /**
-     * Simplified way of tinting a drawable to a certain color
-     *
-     * @param drawable the drawable to tint
-     * @param color    the color to tint the drawable to
-     * @return the tinted drawable
-     */
-    public static Drawable tint(Drawable drawable, @ColorInt int color) {
-        drawable = DrawableCompat.wrap(drawable);
-        DrawableCompat.setTint(drawable, color);
-        return drawable;
-    }
-
-    /**
      * Get a darker version of the specified color (10% darker)
      *
      * @param color starting color
@@ -137,26 +112,94 @@ public class Easel {
         return darkness >= 0.5;
     }
 
-    public static void tint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
-        tint(switchCompat, color, getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
+    /**
+     * Simplified way of getting a drawable and tinting it to a certain color
+     *
+     * @param context context
+     * @param resId   the drawable resource ID
+     * @param color   the color to tint the drawable to
+     * @return the tinted drawable
+     */
+    public static Drawable tint(Context context, @DrawableRes int resId, @ColorInt int color) {
+        return tint(ContextCompat.getDrawable(context, resId), color);
     }
 
-    public static void tint(@NonNull SwitchCompat switchCompat, @ColorInt int color, @ColorInt int unpressedColor) {
+    /**
+     * Simplified way of tinting a drawable to a certain color
+     *
+     * @param drawable the drawable to tint
+     * @param color    the color to tint the drawable to
+     * @return the tinted drawable
+     */
+    public static Drawable tint(Drawable drawable, @ColorInt int color) {
+        drawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTint(drawable, color);
+        return drawable;
+    }
+
+    /**
+     * Tint the button
+     *
+     * @param button the button
+     * @param color  the color
+     */
+    public static void tint(@NonNull Button button, @ColorInt int color) {
         ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{-android.R.attr.state_checked},
-                new int[]{android.R.attr.state_checked}
+                new int[]{}
         }, new int[]{
-                unpressedColor,
                 color
         });
+        ViewCompat.setBackgroundTintList(button, sl);
+    }
 
-        DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
-        DrawableCompat.setTintList(switchCompat.getTrackDrawable(), createSwitchTrackColorStateList(switchCompat.getContext(), color));
+    /**
+     * Tint the checkbox
+     *
+     * @param checkBox the checkbox
+     * @param color    the color
+     */
+    public static void tint(@NonNull CheckBox checkBox, @ColorInt int color) {
+        final int disabledColor = getDisabledColor(checkBox.getContext());
+        ColorStateList sl = new ColorStateList(new int[][]{
+                new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{android.R.attr.state_enabled, android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, -android.R.attr.state_checked},
+                new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked}
+        }, new int[]{
+                getThemeAttrColor(checkBox.getContext(), R.attr.colorControlNormal),
+                color,
+                disabledColor,
+                disabledColor
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            checkBox.setButtonTintList(sl);
+        } else {
+            Drawable checkDrawable = ContextCompat.getDrawable(checkBox.getContext(), R.drawable.abc_btn_check_material);
+            Drawable drawable = DrawableCompat.wrap(checkDrawable);
+            DrawableCompat.setTintList(drawable, sl);
+            checkBox.setButtonDrawable(drawable);
+        }
+    }
+
+    /**
+     * Tint the edit text
+     *
+     * @param editText the edit text
+     * @param color    the color
+     */
+    public static void tint(@NonNull EditText editText, @ColorInt int color) {
+        ColorStateList editTextColorStateList = createEditTextColorStateList(editText.getContext(), color);
+        if (editText instanceof AppCompatEditText) {
+            ((AppCompatEditText) editText).setSupportBackgroundTintList(editTextColorStateList);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            editText.setBackgroundTintList(editTextColorStateList);
+        }
+        tintCursor(editText, color);
     }
 
     /**
      * Tint all menu items within a menu to be a certain color. Note that this does not tint the
-     * overflow menu. Call {@link #tintOverflow(Toolbar, int)} for that
+     * overflow menu. Call {@link #tintOverflow(Toolbar, int)} for that.
      *
      * @param menu  the menu
      * @param color the color
@@ -182,6 +225,35 @@ public class Easel {
             icon.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
         } else {
             throw new IllegalArgumentException("Menu item does not have an icon");
+        }
+    }
+
+    /**
+     * Tint the progressbar
+     *
+     * @param progressBar the progress bar
+     * @param color       the color
+     */
+    public static void tint(@NonNull ProgressBar progressBar, @ColorInt int color) {
+        tint(progressBar, color, false);
+    }
+
+    public static void tint(@NonNull ProgressBar progressBar, @ColorInt int color, boolean skipIndeterminate) {
+        ColorStateList sl = ColorStateList.valueOf(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setProgressTintList(sl);
+            progressBar.setSecondaryProgressTintList(sl);
+            if (!skipIndeterminate)
+                progressBar.setIndeterminateTintList(sl);
+        } else {
+            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
+                mode = PorterDuff.Mode.MULTIPLY;
+            }
+            if (!skipIndeterminate && progressBar.getIndeterminateDrawable() != null)
+                progressBar.getIndeterminateDrawable().setColorFilter(color, mode);
+            if (progressBar.getProgressDrawable() != null)
+                progressBar.getProgressDrawable().setColorFilter(color, mode);
         }
     }
 
@@ -246,93 +318,21 @@ public class Easel {
         }
     }
 
-    /**
-     * Tint the progressbar
-     *
-     * @param progressBar the progress bar
-     * @param color       the color
-     */
-    public static void tint(@NonNull ProgressBar progressBar, @ColorInt int color) {
-        tint(progressBar, color, false);
+    public static void tint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
+        tint(switchCompat, color, getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
     }
 
-    public static void tint(@NonNull ProgressBar progressBar, @ColorInt int color, boolean skipIndeterminate) {
-        ColorStateList sl = ColorStateList.valueOf(color);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setProgressTintList(sl);
-            progressBar.setSecondaryProgressTintList(sl);
-            if (!skipIndeterminate)
-                progressBar.setIndeterminateTintList(sl);
-        } else {
-            PorterDuff.Mode mode = PorterDuff.Mode.SRC_IN;
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.GINGERBREAD_MR1) {
-                mode = PorterDuff.Mode.MULTIPLY;
-            }
-            if (!skipIndeterminate && progressBar.getIndeterminateDrawable() != null)
-                progressBar.getIndeterminateDrawable().setColorFilter(color, mode);
-            if (progressBar.getProgressDrawable() != null)
-                progressBar.getProgressDrawable().setColorFilter(color, mode);
-        }
-    }
-
-    /**
-     * Tint the edit text
-     *
-     * @param editText the edit text
-     * @param color    the color
-     */
-    public static void tint(@NonNull EditText editText, @ColorInt int color) {
-        ColorStateList editTextColorStateList = createEditTextColorStateList(editText.getContext(), color);
-        if (editText instanceof AppCompatEditText) {
-            ((AppCompatEditText) editText).setSupportBackgroundTintList(editTextColorStateList);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            editText.setBackgroundTintList(editTextColorStateList);
-        }
-        tintCursor(editText, color);
-    }
-
-    /**
-     * Tint the checkbox
-     *
-     * @param checkBox the checkbox
-     * @param color    the color
-     */
-    public static void tint(@NonNull CheckBox checkBox, @ColorInt int color) {
-        final int disabledColor = getDisabledColor(checkBox.getContext());
+    public static void tint(@NonNull SwitchCompat switchCompat, @ColorInt int color, @ColorInt int unpressedColor) {
         ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{android.R.attr.state_enabled, -android.R.attr.state_checked},
-                new int[]{android.R.attr.state_enabled, android.R.attr.state_checked},
-                new int[]{-android.R.attr.state_enabled, -android.R.attr.state_checked},
-                new int[]{-android.R.attr.state_enabled, android.R.attr.state_checked}
+                new int[]{-android.R.attr.state_checked},
+                new int[]{android.R.attr.state_checked}
         }, new int[]{
-                getThemeAttrColor(checkBox.getContext(), R.attr.colorControlNormal),
-                color,
-                disabledColor,
-                disabledColor
-        });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            checkBox.setButtonTintList(sl);
-        } else {
-            Drawable checkDrawable = ContextCompat.getDrawable(checkBox.getContext(), R.drawable.abc_btn_check_material);
-            Drawable drawable = DrawableCompat.wrap(checkDrawable);
-            DrawableCompat.setTintList(drawable, sl);
-            checkBox.setButtonDrawable(drawable);
-        }
-    }
-
-    /**
-     * Tint the button
-     *
-     * @param button the button
-     * @param color  the color
-     */
-    public static void tint(@NonNull Button button, @ColorInt int color) {
-        ColorStateList sl = new ColorStateList(new int[][]{
-                new int[]{}
-        }, new int[]{
+                unpressedColor,
                 color
         });
-        ViewCompat.setBackgroundTintList(button, sl);
+
+        DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
+        DrawableCompat.setTintList(switchCompat.getTrackDrawable(), createSwitchTrackColorStateList(switchCompat.getContext(), color));
     }
 
     /**
@@ -367,8 +367,7 @@ public class Easel {
     }
 
     /**
-     * Sets the color of the overflow menu item. You most likely need to use a {@link android.view.ViewTreeObserver.OnGlobalLayoutListener} with this to make it work since
-     * the color cannot be applied until the overflow icon exists
+     * Sets the color of the overflow menu item within the Toolbar.
      *
      * @param toolbar the toolbar
      * @param color   color to set the overflow icon to

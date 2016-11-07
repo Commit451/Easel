@@ -1,9 +1,12 @@
 package com.commit451.easel.kotlin
 
+import android.annotation.TargetApi
 import android.support.annotation.ColorInt
 import android.support.v7.widget.SwitchCompat
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import com.commit451.easel.Easel
 import com.commit451.easel.R
@@ -11,10 +14,6 @@ import com.commit451.easel.R
 /**
  * Kotlin bindings for Easel
  */
-
-fun EditText.tintCursor(@ColorInt color: Int) {
-    Easel.tintCursor(this, color)
-}
 
 fun EditText.tint(@ColorInt color : Int) {
     Easel.tint(this, color)
@@ -50,6 +49,19 @@ fun Menu.tint(@ColorInt color : Int) {
 
 fun SeekBar.tint(@ColorInt color : Int) {
     Easel.tint(this, color)
+}
+
+fun Toolbar.tintOverflow(@ColorInt color : Int) {
+    Easel.tintOverflow(this, color)
+}
+
+fun EditText.tintCursor(@ColorInt color: Int) {
+    Easel.tintCursor(this, color)
+}
+
+@TargetApi(21)
+fun View.tintEdgeEffect(@ColorInt color :Int) {
+    Easel.tintEdgeEffect(this, color)
 }
 
 
