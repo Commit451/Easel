@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 
 import com.commit451.easel.Easel;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         Button button = (Button) findViewById(R.id.button);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
         Easel.tint(editText, Color.MAGENTA);
         Easel.tint(radioButton, Color.MAGENTA);
         Easel.tint(checkBox, Color.MAGENTA);
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         Easel.tint(progressBar, Color.MAGENTA);
         Easel.tint(seekBar, Color.MAGENTA);
         Easel.tint(button, Color.MAGENTA);
+        Easel.tint(spinner, Color.MAGENTA);
         findViewById(R.id.button_kotlin).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

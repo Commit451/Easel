@@ -31,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -333,6 +334,10 @@ public class Easel {
 
         DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
         DrawableCompat.setTintList(switchCompat.getTrackDrawable(), createSwitchTrackColorStateList(switchCompat.getContext(), color));
+    }
+
+    public static void tint(@NonNull Spinner spinner, @ColorInt int color){
+        spinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
     /**
