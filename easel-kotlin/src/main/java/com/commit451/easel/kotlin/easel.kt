@@ -51,6 +51,10 @@ fun SeekBar.tint(@ColorInt color : Int) {
     Easel.tint(this, color)
 }
 
+fun Spinner.tint(@ColorInt color : Int) {
+    Easel.tint(this, color)
+}
+
 fun Toolbar.tintOverflow(@ColorInt color : Int) {
     Easel.tintOverflow(this, color)
 }
