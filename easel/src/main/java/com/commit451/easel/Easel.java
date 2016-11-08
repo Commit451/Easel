@@ -319,6 +319,10 @@ public class Easel {
         }
     }
 
+    public static void tint(@NonNull Spinner spinner, @ColorInt int color){
+        spinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+    }
+
     public static void tint(@NonNull SwitchCompat switchCompat, @ColorInt int color) {
         tint(switchCompat, color, getThemeAttrColor(switchCompat.getContext(), R.attr.colorSwitchThumbNormal));
     }
@@ -334,10 +338,6 @@ public class Easel {
 
         DrawableCompat.setTintList(switchCompat.getThumbDrawable(), sl);
         DrawableCompat.setTintList(switchCompat.getTrackDrawable(), createSwitchTrackColorStateList(switchCompat.getContext(), color));
-    }
-
-    public static void tint(@NonNull Spinner spinner, @ColorInt int color){
-        spinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
     /**
@@ -361,9 +361,9 @@ public class Easel {
             fCursorDrawable.setAccessible(true);
             Drawable[] drawables = new Drawable[2];
             drawables[0] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[0] = tint(drawables[0], color);
+            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             drawables[1] = ContextCompat.getDrawable(editText.getContext(), mCursorDrawableRes);
-            drawables[1] = tint(drawables[1], color);
+            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
             fCursorDrawable.set(editor, drawables);
         } catch (Exception e) {
             return false;
