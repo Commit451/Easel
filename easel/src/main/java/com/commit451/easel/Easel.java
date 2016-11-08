@@ -37,6 +37,8 @@ import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import static com.commit451.easel.ReflectionUtil.getField;
+
 /**
  * Apply tinting to widgets, drawables, all the color things you would ever need!
  */
@@ -195,7 +197,7 @@ public class Easel {
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             editText.setBackgroundTintList(editTextColorStateList);
         }
-        tintCursor(editText, color);
+        tint((TextView) editText, color);
     }
 
     /**
@@ -341,6 +343,18 @@ public class Easel {
     }
 
     /**
+     * Tint the textview. This is a convenience call through to {@link #tintCursor(TextView, int)}, {@link #tintHandles(TextView, int)}
+     * and {@link #tintSelectionHighlight(TextView, int)}
+     * @param textView text view
+     * @param color the color
+     */
+    public static void tint(@NonNull TextView textView, @ColorInt int color) {
+        tintCursor(textView, color);
+        tintHandles(textView, color);
+        tintSelectionHighlight(textView, adjustAlpha(color, 0.3f));
+    }
+
+    /**
      * Tints the cursor color of the EditText. Kinda hacky using reflection, but it gets the job done.
      * http://stackoverflow.com/questions/25996032/how-to-change-programatically-edittext-cursor-color-in-android
      *
@@ -348,13 +362,12 @@ public class Easel {
      * @param color    color to change the cursor to
      * @return true if cursor was successfully tinted, false if Android has changed the field names and reflection has failed us
      */
-    public static boolean tintCursor(@NonNull EditText editText, @ColorInt int color) {
+    public static boolean tintCursor(@NonNull TextView editText, @ColorInt int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);
             int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
-            Field fEditor = TextView.class.getDeclaredField("mEditor");
-            fEditor.setAccessible(true);
+            Field fEditor = getEditorField();
             Object editor = fEditor.get(editText);
             Class<?> clazz = editor.getClass();
             Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
@@ -369,6 +382,62 @@ public class Easel {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Tint the handles that appear when you select text
+     * @param textView the text view
+     * @param color the color
+     * @return true if properly tinted, false if reflection has failed us
+     */
+    public static boolean tintHandles(@NonNull TextView textView, @ColorInt int color) {
+        try {
+            Field fTextSelectHandleLeftRes = getField(TextView.class, "mTextSelectHandleLeftRes");
+            Field fTextSelectHandleRightRes = getField(TextView.class, "mTextSelectHandleRightRes");
+            Field fTextSelectHandleCenterRes = getField(TextView.class, "mTextSelectHandleRes");
+            int leftRes = fTextSelectHandleLeftRes.getInt(textView);
+            int rightRes = fTextSelectHandleRightRes.getInt(textView);
+            int centerRes = fTextSelectHandleCenterRes.getInt(textView);
+            Field fEditor = getEditorField();
+            Object editor = fEditor.get(textView);
+            Class<?> clazz = editor.getClass();
+            Field fHandleLeftDrawable = getField(clazz, "mSelectHandleLeft");
+            Field fHandleRightDrawable = getField(clazz, "mSelectHandleRight");
+            Field fHandleCenterDrawable = getField(clazz, "mSelectHandleCenter");
+            setDrawable(textView, editor, fHandleLeftDrawable, color, leftRes);
+            setDrawable(textView, editor, fHandleRightDrawable, color, rightRes);
+            setDrawable(textView, editor, fHandleCenterDrawable, color, centerRes);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Tint the highlight that appears when you select text
+     * @param textView the text view
+     * @param color the color to tint to
+     * @return true if success, false if reflection failed
+     */
+    public static boolean tintSelectionHighlight(@NonNull TextView textView, @ColorInt int color) {
+        //You would think you would modify mHighlightPaint, but no, you need to modify mHighlightColor,
+        //as it gets set as the color on the paint on each draw call
+        try {
+            Field fHighlightColor = ReflectionUtil.getField(TextView.class, "mHighlightColor");
+            fHighlightColor.set(textView, color);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private static void setDrawable(TextView textView, Object editor, Field field, @ColorInt int color,
+                                    @DrawableRes int drawableRes) throws IllegalAccessException {
+        Drawable drawable = ContextCompat.getDrawable(textView.getContext(), drawableRes)
+                .mutate();
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        field.set(editor, drawable);
     }
 
     /**
@@ -419,6 +488,12 @@ public class Easel {
             }
         }
         return outcome;
+    }
+
+    private static Field getEditorField() throws NoSuchFieldException {
+        Field fEditor = TextView.class.getDeclaredField("mEditor");
+        fEditor.setAccessible(true);
+        return fEditor;
     }
 
     private static ColorStateList createEditTextColorStateList(@NonNull Context context, @ColorInt int color) {

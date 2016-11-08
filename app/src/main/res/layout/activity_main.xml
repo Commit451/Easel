@@ -22,6 +22,12 @@
             android:layout_margin="16dp"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                android:text="This is a text view. This is a text view. This is a text view. This is a text view. This is a text view. This is a text view. This is a text view. This is a text view. "/>
+
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="wrap_content"

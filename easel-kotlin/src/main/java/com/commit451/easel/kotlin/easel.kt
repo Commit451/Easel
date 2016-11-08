@@ -55,12 +55,24 @@ fun Spinner.tint(@ColorInt color : Int) {
     Easel.tint(this, color)
 }
 
+fun TextView.tint(@ColorInt color : Int) {
+    Easel.tint(this, color)
+}
+
 fun Toolbar.tintOverflow(@ColorInt color : Int) {
     Easel.tintOverflow(this, color)
 }
 
-fun EditText.tintCursor(@ColorInt color: Int) {
+fun TextView.tintCursor(@ColorInt color: Int) {
     Easel.tintCursor(this, color)
+}
+
+fun TextView.tintHandles(@ColorInt color : Int) {
+    Easel.tintHandles(this, color)
+}
+
+fun TextView.tintSelectionHighlight(@ColorInt color : Int) {
+    Easel.tintSelectionHighlight(this, color)
 }
 
 @TargetApi(21)
