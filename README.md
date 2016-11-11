@@ -16,9 +16,9 @@ allprojects {
 then, in your app `build.gradle`
 ```groovy
 dependencies {
-    compile 'com.github.Commit451.Easel:easel:latest.version.here'
+    compile 'com.github.Commit451.Easel:easel:latest.version.here@aar'
     //and, for kotlin extensions
-    compile 'com.github.Commit451.Easel:easel-kotlin:latest.version.here'
+    compile 'com.github.Commit451.Easel:easel-kotlin:latest.version.here@aar'
 }
 ```
 
