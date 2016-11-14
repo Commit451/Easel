@@ -20,6 +20,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,7 +76,7 @@ public class Easel {
      * @param attributeColor the attribute color, ex R.attr.colorPrimary
      * @return the color, or {@link Color#TRANSPARENT} if failed to resolve
      */
-    public static int getThemeAttrColor(Context context, @AttrRes int attributeColor) {
+    public static int getThemeAttrColor(@NonNull Context context, @AttrRes int attributeColor) {
         int[] attrs = new int[]{attributeColor};
         TypedArray ta = context.obtainStyledAttributes(attrs);
         int color = ta.getColor(0, Color.TRANSPARENT);
@@ -91,12 +92,29 @@ public class Easel {
      * @return the drawable, if it exists in the theme context
      */
     @Nullable
-    public static Drawable getThemeAttrDrawable(Context context, @AttrRes int attributeDrawable) {
+    public static Drawable getThemeAttrDrawable(@NonNull Context context, @AttrRes int attributeDrawable) {
         int[] attrs = new int[]{attributeDrawable};
         TypedArray ta = context.obtainStyledAttributes(attrs);
         Drawable drawableFromTheme = ta.getDrawable(0);
         ta.recycle();
         return drawableFromTheme;
+    }
+
+    /**
+     * Get a dimen from the attribute theme
+     *
+     * @param context           theme context
+     * @param attributeDimen the attribute dimen, ex R.attr.actionBarSize
+     * @return the dimen pixel size, if it exists in the theme context. Otherwise, -1
+     */
+    public static float getThemeAttrDimen(@NonNull Context context, @AttrRes int attributeDimen) {
+        TypedValue tv = new TypedValue();
+
+        int value = -1;
+        if (context.getTheme().resolveAttribute(attributeDimen, tv, true)) {
+            value = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
+        }
+        return value;
     }
 
     /**
@@ -106,7 +124,7 @@ public class Easel {
      * @param factor factor, such as 0.5f for 50%
      * @return the color with the adjusted alpha
      */
-    public static int adjustAlpha(int color, float factor) {
+    public static int adjustAlpha(@ColorInt int color, float factor) {
         return Color.argb(Math.round(Color.alpha(color) * factor), Color.red(color), Color.green(color), Color.blue(color));
     }
 
@@ -123,7 +141,7 @@ public class Easel {
      * @param color   the color to tint the drawable to
      * @return the tinted drawable
      */
-    public static Drawable tint(Context context, @DrawableRes int resId, @ColorInt int color) {
+    public static Drawable tint(@NonNull Context context, @DrawableRes int resId, @ColorInt int color) {
         return tint(ContextCompat.getDrawable(context, resId), color);
     }
 
@@ -134,7 +152,7 @@ public class Easel {
      * @param color    the color to tint the drawable to
      * @return the tinted drawable
      */
-    public static Drawable tint(Drawable drawable, @ColorInt int color) {
+    public static Drawable tint(@NonNull Drawable drawable, @ColorInt int color) {
         drawable = DrawableCompat.wrap(drawable);
         DrawableCompat.setTint(drawable, color);
         return drawable;
@@ -468,7 +486,7 @@ public class Easel {
      * @return true if it worked, false if it did not
      */
     @TargetApi(21)
-    public static boolean tintEdgeEffect(View scrollableView, int color) {
+    public static boolean tintEdgeEffect(@NonNull View scrollableView, @ColorInt int color) {
         //http://stackoverflow.com/questions/27104521/android-lollipop-scrollview-edge-effect-color
         boolean outcome = false;
         final String[] edgeGlows = {"mEdgeGlowTop", "mEdgeGlowBottom", "mEdgeGlowLeft", "mEdgeGlowRight"};
