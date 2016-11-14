@@ -103,7 +103,7 @@ public class Easel {
     /**
      * Get a dimen from the attribute theme
      *
-     * @param context           theme context
+     * @param context        theme context
      * @param attributeDimen the attribute dimen, ex R.attr.actionBarSize
      * @return the dimen pixel size, if it exists in the theme context. Otherwise, -1
      */
@@ -339,7 +339,7 @@ public class Easel {
         }
     }
 
-    public static void tint(@NonNull Spinner spinner, @ColorInt int color){
+    public static void tint(@NonNull Spinner spinner, @ColorInt int color) {
         spinner.getBackground().setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
     }
 
@@ -363,8 +363,9 @@ public class Easel {
     /**
      * Tint the textview. This is a convenience call through to {@link #tintCursor(TextView, int)}, {@link #tintHandles(TextView, int)}
      * and {@link #tintSelectionHighlight(TextView, int)}
+     *
      * @param textView text view
-     * @param color the color
+     * @param color    the color
      */
     public static void tint(@NonNull TextView textView, @ColorInt int color) {
         tintCursor(textView, color);
@@ -404,8 +405,9 @@ public class Easel {
 
     /**
      * Tint the handles that appear when you select text
+     *
      * @param textView the text view
-     * @param color the color
+     * @param color    the color
      * @return true if properly tinted, false if reflection has failed us
      */
     public static boolean tintHandles(@NonNull TextView textView, @ColorInt int color) {
@@ -433,8 +435,9 @@ public class Easel {
 
     /**
      * Tint the highlight that appears when you select text
+     *
      * @param textView the text view
-     * @param color the color to tint to
+     * @param color    the color to tint to
      * @return true if success, false if reflection failed
      */
     public static boolean tintSelectionHighlight(@NonNull TextView textView, @ColorInt int color) {
@@ -481,8 +484,9 @@ public class Easel {
 
     /**
      * Tint the edge effect when you reach the end of a scroll view. API 21+ only
+     *
      * @param scrollableView the scrollable view, such as a {@link android.widget.ScrollView}
-     * @param color the color
+     * @param color          the color
      * @return true if it worked, false if it did not
      */
     @TargetApi(21)
