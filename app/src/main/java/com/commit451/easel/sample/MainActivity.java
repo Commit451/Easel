@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Easel");
         toolbar.inflateMenu(R.menu.menu_main);
+        MenuItem searchMenuItem = toolbar.getMenu().findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+
         Easel.tint(toolbar.getMenu(), Color.MAGENTA);
         Easel.tintOverflow(toolbar, Color.MAGENTA);
 
