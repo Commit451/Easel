@@ -1,1 +1,1 @@
-include ':app', ':easel', ':easel-kotlin'
+include ':app', ':easel'

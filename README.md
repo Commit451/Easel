@@ -16,18 +16,12 @@ allprojects {
 then, in your app `build.gradle`
 ```groovy
 dependencies {
-    compile "com.github.Commit451.Easel:easel:latest.version.here"
-    //and, for kotlin extensions
-    compile "com.github.Commit451.Easel:easel-kotlin:latest.version.here"
+    implementation "com.github.Commit451:Easel:latest.version.here"
 }
 ```
 
 # Usage
 See sample project for clear usage. Mostly looks like this:
-```java
-Easel.tint(checkBox, color);
-```
-If you are using Kotlin, extensions methods make it even easier:
 ```kotlin
 checkbox.tint(color)
 ```
@@ -45,7 +39,6 @@ Currently, you can tint the following views at run time:
 - TextView
 
 In addition, you can also tint other things which are somewhat difficult to tint in Android, such as:
-- Drawable
 - TextView cursor
 - TextView handles
 - TextView selection highlight
