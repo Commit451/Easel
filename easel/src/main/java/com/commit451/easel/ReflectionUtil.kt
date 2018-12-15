@@ -1,9 +1,9 @@
 package com.commit451.easel
 
 import android.graphics.PorterDuff
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import android.widget.TextView
 import java.lang.reflect.Field
 
@@ -27,8 +27,8 @@ internal object ReflectionUtil {
     fun setDrawable(textView: TextView, editor: Any, field: Field, @ColorInt color: Int,
                             @DrawableRes drawableRes: Int) {
         val drawable = ContextCompat.getDrawable(textView.context, drawableRes)
-                .mutate()
-        drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+                ?.mutate()
+        drawable?.setColorFilter(color, PorterDuff.Mode.SRC_IN)
         field.set(editor, drawable)
     }
 }

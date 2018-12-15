@@ -1,6 +1,6 @@
 package com.commit451.easel
 
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.view.Menu
 
 /**

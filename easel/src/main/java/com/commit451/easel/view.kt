@@ -1,7 +1,7 @@
 package com.commit451.easel
 
 import android.annotation.TargetApi
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.view.View
 import android.widget.EdgeEffect
 

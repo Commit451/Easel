@@ -1,9 +1,9 @@
 package com.commit451.easel
 
 import android.content.res.ColorStateList
-import android.support.annotation.ColorInt
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.widget.SwitchCompat
+import androidx.annotation.ColorInt
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.appcompat.widget.SwitchCompat
 import com.commit451.easel.Easel.getThemeAttrColor
 
 fun SwitchCompat.tint(@ColorInt color: Int, @ColorInt unpressedColor: Int = getThemeAttrColor(context, R.attr.colorSwitchThumbNormal)) {

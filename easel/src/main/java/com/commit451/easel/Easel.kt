@@ -3,8 +3,8 @@ package com.commit451.easel
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.support.annotation.AttrRes
-import android.support.annotation.ColorInt
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 
 /**
  * Color things!

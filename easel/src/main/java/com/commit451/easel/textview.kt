@@ -2,8 +2,8 @@ package com.commit451.easel
 
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import android.widget.TextView
 import com.commit451.easel.ReflectionUtil.getEditorField
 import com.commit451.easel.ReflectionUtil.getField

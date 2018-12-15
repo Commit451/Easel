@@ -1,8 +1,8 @@
 package com.commit451.easel
 
 import android.content.res.ColorStateList
-import android.support.annotation.ColorInt
-import android.support.v4.view.ViewCompat
+import androidx.annotation.ColorInt
+import androidx.core.view.ViewCompat
 import android.widget.Button
 
 /**

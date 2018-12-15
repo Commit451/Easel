@@ -1,7 +1,7 @@
 package com.commit451.easel
 
 import android.graphics.PorterDuff
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.widget.Spinner
 
 fun Spinner.tint(@ColorInt color: Int) {

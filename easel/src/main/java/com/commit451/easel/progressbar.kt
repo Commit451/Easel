@@ -3,7 +3,7 @@ package com.commit451.easel
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.os.Build
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import android.widget.ProgressBar
 
 fun ProgressBar.tint(@ColorInt color: Int, skipIndeterminate: Boolean = false) {

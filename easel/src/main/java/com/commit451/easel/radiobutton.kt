@@ -2,16 +2,15 @@ package com.commit451.easel
 
 import android.content.res.ColorStateList
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import android.widget.RadioButton
 import com.commit451.easel.Easel.getThemeAttrColor
 
 /**
  * Tint the radio button
- *
- * @param color       the color
+ * @param color the color
  */
 fun RadioButton.tint(@ColorInt color: Int) {
     val disabledColor = Easel.getDisabledColor(context)
@@ -19,7 +18,7 @@ fun RadioButton.tint(@ColorInt color: Int) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         buttonTintList = sl
     } else {
-        val radioDrawable = ContextCompat.getDrawable(context, R.drawable.abc_btn_radio_material)
+        val radioDrawable = ContextCompat.getDrawable(context, R.drawable.abc_btn_radio_material)!!
         val d = DrawableCompat.wrap(radioDrawable)
         DrawableCompat.setTintList(d, sl)
         buttonDrawable = d
