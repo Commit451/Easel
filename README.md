@@ -1,22 +1,13 @@
 # Easel
 Tint and color Android views with ease
 
-[![Build Status](https://travis-ci.org/Commit451/Easel.svg?branch=master)](https://travis-ci.org/Commit451/Easel) [![](https://jitpack.io/v/Commit451/Easel.svg)](https://jitpack.io/#Commit451/Easel)
+[![Build](https://github.com/Commit451/Easel/actions/workflows/ci.yml/badge.svg)](https://github.com/Commit451/Easel/actions/workflows/ci.yml) [![Maven Central](https://img.shields.io/maven-central/v/com.commit451/easel.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/com.commit451/easel)
 
 # Gradle Dependency
-Add the jitpack url to the project:
-```groovy
-allprojects {
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-    }
-}
-```
-then, in your app `build.gradle`
-```groovy
+Add the library to your app `build.gradle`:
+```gradle
 dependencies {
-    implementation "com.github.Commit451:Easel:latest.version.here"
+    implementation("com.commit451:easel:latest.version.here")
 }
 ```
 
