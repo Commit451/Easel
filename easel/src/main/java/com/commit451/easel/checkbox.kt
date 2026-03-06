@@ -10,11 +10,11 @@ import com.commit451.easel.Easel.getThemeAttrColor
 
 fun CheckBox.tint(@ColorInt color: Int) {
     val disabledColor = Easel.getDisabledColor(context)
-    val sl = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(android.R.attr.state_enabled, android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, android.R.attr.state_checked)), intArrayOf(getThemeAttrColor(getContext(), R.attr.colorControlNormal), color, disabledColor, disabledColor))
+    val sl = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(android.R.attr.state_enabled, android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, android.R.attr.state_checked)), intArrayOf(getThemeAttrColor(getContext(), androidx.appcompat.R.attr.colorControlNormal), color, disabledColor, disabledColor))
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         buttonTintList = sl
     } else {
-        val checkDrawable = ContextCompat.getDrawable(context, R.drawable.abc_btn_check_material)!!
+        val checkDrawable = ContextCompat.getDrawable(context, androidx.appcompat.R.drawable.abc_btn_check_material)!!
         val drawable = DrawableCompat.wrap(checkDrawable)
         DrawableCompat.setTintList(drawable, sl)
         buttonDrawable = drawable

@@ -15,7 +15,7 @@ import java.util.*
  */
 fun Toolbar.tintOverflow(@ColorInt color: Int): Boolean {
     @SuppressLint("PrivateResource")
-    val overflowDescription = context.getString(R.string.abc_action_menu_overflow_description)
+    val overflowDescription = context.getString(androidx.appcompat.R.string.abc_action_menu_overflow_description)
     val outViews = ArrayList<View>()
     findViewsWithText(outViews, overflowDescription,
             View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION)

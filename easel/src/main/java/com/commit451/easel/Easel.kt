@@ -66,10 +66,10 @@ object Easel {
         val colors = IntArray(3)
         var i = 0
         states[i] = intArrayOf(-android.R.attr.state_enabled)
-        colors[i] = getThemeAttrColor(context, R.attr.colorControlNormal)
+        colors[i] = getThemeAttrColor(context, androidx.appcompat.R.attr.colorControlNormal)
         i++
         states[i] = intArrayOf(-android.R.attr.state_pressed, -android.R.attr.state_focused)
-        colors[i] = getThemeAttrColor(context, R.attr.colorControlNormal)
+        colors[i] = getThemeAttrColor(context, androidx.appcompat.R.attr.colorControlNormal)
         i++
         states[i] = intArrayOf()
         colors[i] = color
@@ -90,7 +90,7 @@ object Easel {
 
         // Disabled state
         states[i] = intArrayOf(-android.R.attr.state_enabled)
-        colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.1f)
+        colors[i] = adjustAlpha(getThemeAttrColor(context, androidx.appcompat.R.attr.colorControlNormal), 0.1f)
         i++
 
         states[i] = intArrayOf(android.R.attr.state_checked)
@@ -99,7 +99,7 @@ object Easel {
 
         // Default enabled state
         states[i] = IntArray(0)
-        colors[i] = adjustAlpha(getThemeAttrColor(context, R.attr.colorControlNormal), 0.5f)
+        colors[i] = adjustAlpha(getThemeAttrColor(context, androidx.appcompat.R.attr.colorControlNormal), 0.5f)
 
         return ColorStateList(states, colors)
     }

@@ -14,11 +14,11 @@ import com.commit451.easel.Easel.getThemeAttrColor
  */
 fun RadioButton.tint(@ColorInt color: Int) {
     val disabledColor = Easel.getDisabledColor(context)
-    val sl = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(android.R.attr.state_enabled, android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, android.R.attr.state_checked)), intArrayOf(getThemeAttrColor(context, R.attr.colorControlNormal), color, disabledColor, disabledColor))
+    val sl = ColorStateList(arrayOf(intArrayOf(android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(android.R.attr.state_enabled, android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, -android.R.attr.state_checked), intArrayOf(-android.R.attr.state_enabled, android.R.attr.state_checked)), intArrayOf(getThemeAttrColor(context, androidx.appcompat.R.attr.colorControlNormal), color, disabledColor, disabledColor))
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         buttonTintList = sl
     } else {
-        val radioDrawable = ContextCompat.getDrawable(context, R.drawable.abc_btn_radio_material)!!
+        val radioDrawable = ContextCompat.getDrawable(context, androidx.appcompat.R.drawable.abc_btn_radio_material)!!
         val d = DrawableCompat.wrap(radioDrawable)
         DrawableCompat.setTintList(d, sl)
         buttonDrawable = d
